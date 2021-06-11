@@ -1,0 +1,36 @@
+Vagrant.configure("2") do |config|
+
+	config.vm.define "httpd-01" do |httpd01|
+		httpd01.vm.box = "centos/7"
+		httpd01.vm.hostname = "httpd-01"
+		httpd01.vm.network "private_network", ip: "10.100.0.11"
+		httpd01.vm.network "forwarded_port", guest: 80, host: 8080
+    httpd01.vm.synced_folder ".", "/vagrant_data", disabled: true
+		httpd01.vm.provision "shell" do |sh|
+			sh.inline = <<-SHELL
+				sudo sed -i 's/#ListenAddress 0.0.0.0/ListenAddress 0.0.0.0/g' /etc/ssh/sshd_config
+        sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+        echo "" > /home/vagrant/.ssh/authorized_keys
+        echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDUaFMXIfnRnXSMEl37rw6l5GMsDHq9R/QdA7G+pr81/llTgOD/VpE1ZHGnAaPWv8zwrOJU9VT5Tw90Y3FrbacmpVdqZRR74Lqg48htmwVD9GOgXD7+eTpRSCPkoNVdVtjbIXjebkBlRw7GVBfQLYn+t8uX2LR4apGs1EZ1sjQ9Broho3bXXkejQ2K17SBieAUtTIcv3jySH5Q7wmzA4O2o8a55uxf1dVHsWnZ8slYG/hmbxfKD1zANt60UXaRxhN5wNIqBn8A5aPxybjl7Qo7UZSsgWivoPXA9w/jWMH7xKqjmdvTi8b+0sedxvdJtGh5ncmNigKPAVwsCmHDENUkWPghUVjpjdwesOtngc+LNTDrhUOkGEovEccJx3vdEojsh2BS41Kt92M9k2Oz9LmScxy3oZ6ImRvbTxBpEqWFesh6YiejtMy16+CcC2ISVhWDJjx6O9LukZ3xJ7eUHET5vfEhL0rrappg0ksMoHThLDLaA+9EIfRLZH9gQ1LEw1ojQlQM0TVJJZ9upUKwz0Nu1wnTXQHGxnqUuhdAoWH5e7PiTMHkiLqQpFrM12uKEdrxt6bvhRpk4Ptc0NZ9qJCry2sA5Snhv25lDRsQpODmE3tDG3zzA9tgSxHVWgxAp0IYVjuas5gJlnsc9xugcaAicG+8UDjgcvd5TD5zSbr9Z8Q== vagrant" >> /home/vagrant/.ssh/authorized_keys
+				sudo systemctl restart sshd
+			SHELL
+		end
+	end
+
+	config.vm.define "httpd-02" do |httpd02|
+		httpd02.vm.box = "centos/7"
+		httpd02.vm.hostname = "httpd-02"
+		httpd02.vm.network "private_network", ip: "10.100.0.12"
+    httpd02.vm.network "forwarded_port", guest: 80, host: 8081
+    httpd02.vm.synced_folder ".", "/vagrant_data", disabled: true
+		httpd02.vm.provision "shell" do |sh|
+			sh.inline = <<-SHELL
+				sudo sed -i 's/#ListenAddress 0.0.0.0/ListenAddress 0.0.0.0/g' /etc/ssh/sshd_config
+        sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+        echo "" > /home/vagrant/.ssh/authorized_keys
+        echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDUaFMXIfnRnXSMEl37rw6l5GMsDHq9R/QdA7G+pr81/llTgOD/VpE1ZHGnAaPWv8zwrOJU9VT5Tw90Y3FrbacmpVdqZRR74Lqg48htmwVD9GOgXD7+eTpRSCPkoNVdVtjbIXjebkBlRw7GVBfQLYn+t8uX2LR4apGs1EZ1sjQ9Broho3bXXkejQ2K17SBieAUtTIcv3jySH5Q7wmzA4O2o8a55uxf1dVHsWnZ8slYG/hmbxfKD1zANt60UXaRxhN5wNIqBn8A5aPxybjl7Qo7UZSsgWivoPXA9w/jWMH7xKqjmdvTi8b+0sedxvdJtGh5ncmNigKPAVwsCmHDENUkWPghUVjpjdwesOtngc+LNTDrhUOkGEovEccJx3vdEojsh2BS41Kt92M9k2Oz9LmScxy3oZ6ImRvbTxBpEqWFesh6YiejtMy16+CcC2ISVhWDJjx6O9LukZ3xJ7eUHET5vfEhL0rrappg0ksMoHThLDLaA+9EIfRLZH9gQ1LEw1ojQlQM0TVJJZ9upUKwz0Nu1wnTXQHGxnqUuhdAoWH5e7PiTMHkiLqQpFrM12uKEdrxt6bvhRpk4Ptc0NZ9qJCry2sA5Snhv25lDRsQpODmE3tDG3zzA9tgSxHVWgxAp0IYVjuas5gJlnsc9xugcaAicG+8UDjgcvd5TD5zSbr9Z8Q== vagrant" >> /home/vagrant/.ssh/authorized_keys
+				sudo systemctl restart sshd
+			SHELL
+		end
+	end
+end
