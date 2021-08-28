@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
-	config.vm.provider :virtualbox do |maxscale-01|
-		maxscale-01.customize ["modifyvm", :id, "--memory", 1024]
+	config.vm.provider :virtualbox do |maxscale01|
+		maxscale01.customize ["modifyvm", :id, "--memory", 1024]
 	end
 	config.vm.define "maxscale-01" do |maxscale01|
 		maxscale01.vm.box = "debian/buster64"
@@ -18,8 +18,8 @@ Vagrant.configure("2") do |config|
 		end
 	end
 
-	config.vm.provider :virtualbox do |maxscale-02|
-		maxscale-02.customize ["modifyvm", :id, "--memory", 1024]
+	config.vm.provider :virtualbox do |maxscale02|
+		maxscale02.customize ["modifyvm", :id, "--memory", 1024]
 	end
 	config.vm.define "maxscale-02" do |maxscale02|
 		maxscale02.vm.box = "debian/buster64"
